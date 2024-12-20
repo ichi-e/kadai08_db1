@@ -1,13 +1,48 @@
-<?php include('header.php'); ?>
+<?php
+session_start();
+
+include('header.php');
+require_once('funcs.php');
+
+// エラーと入力データの取得
+$errors = $_SESSION['errors'];
+$inputData = $_SESSION['input_data'];
+$success = $_SESSION['success'];
+
+// セッションをリセット
+unset($_SESSION['errors'], $_SESSION['input_data'], $_SESSION['success']);
+?>
 
 <main>
+    <!-- エラーメッセージ表示 -->
+    <?php if (!empty($errors)): ?>
+        <div class="message">
+            <p>未入力の項目があります。</p>
+            <ul style="color: red;">
+                <?php foreach ($errors as $error): ?>
+                    <li><?php echo h($error); ?></li>
+                <?php endforeach; ?>
+            </ul>
+        </div>
+    <?php endif; ?>
+
+    <!-- 成功メッセージ表示 -->
+    <?php if (isset($success)): ?>
+        <div class="message">
+            <p style="color: green;"><?php echo h($success); ?></p>
+        </div>
+    <?php endif; ?>
+
+
+
     <form enctype="multipart/form-data" action="insert.php" method="post">
+        <p>＊は必須項目です</p>
         <div>
-            <h2>ホテル名</h2>
-            <input type="text" name="name">
+            <h2>ホテル名＊</h2>
+            <input type="text" name="name" value="<?php echo h($inputData['name'] ?? '') ?>">
         </div>
         <div>
-            <h2>都道府県</h2>
+            <h2>都道府県＊</h2>
             <select name="pref">
                 <option value="" selected>選択してください</option>
                 <option value="北海道">北海道</option>
@@ -61,15 +96,15 @@
         </div>
         <div>
             <h2>URL</h2>
-            <input type="text" name="url">
+            <input type="text" name="url" value="<?php echo h($inputData['url'] ?? '') ?>">
         </div>
         <div class="range-group">
-            <h2>オススメ度</h2>
-            <input type="range" min="1" max="5" value="" class="input-range" name="stars" />
+            <h2>オススメ度＊</h2>
+            <input type="range" min="0" max="5" value="0" class="input-range" name="stars" />
             <div class="stars"></div>
         </div>
         <div>
-            <h2>うれしいポイント</h2>
+            <h2>うれしいポイント＊</h2>
             <div>
                 <label><input type="checkbox" name="point[]" value="バス・トイレ別">バス・トイレ別</label>
                 <label><input type="checkbox" name="point[]" value="小学生まで添い寝OK">小学生まで添い寝OK</label>
@@ -80,12 +115,12 @@
             </div>
         </div>
         <div>
-            <h2>写真</h2>
+            <h2>写真＊</h2>
             <input type="file" name="img" accept="image/*" multiple>
         </div>
         <div>
-            <h2>コメント</h2>
-            <textarea name="comment" cols="30" rows="10"></textarea>
+            <h2>コメント＊</h2>
+            <textarea name="comment" cols="30" rows="10"><?php echo h($inputData['comment'] ?? '') ?></textarea>
         </div>
 
         <div class="submit">

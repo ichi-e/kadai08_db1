@@ -299,3 +299,21 @@ form label input {
     background: rgba(0, 0, 0, 0);
     transition: 0.2s linear;
 }
+
+/* エラーメッセージ */
+.message {
+    width: 800px;
+    margin: 0 auto 30px;
+    border: 1px solid #999;
+    padding: 20px;
+    box-sizing: border-box;
+}
+.message li {
+    margin-top: 10px;
+    font-size: 12px;
+    list-style: disc inside;
+}
+form p {
+    margin-bottom: 30px;
+    font-size: 12px;
+}

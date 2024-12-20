@@ -1,4 +1,38 @@
 <?php
+
+session_start();
+
+$name = $_POST['name'] ?? '';
+$pref = $_POST['pref'] ?? '';
+$stars = $_POST['stars'] ?? '0';
+
+$errors = [];
+// 必須項目のチェック
+if (empty($name)) {
+    $errors['name'] = 'ホテル名は必須です。';
+}
+if (empty($pref)) {
+    $errors['pref'] = '都道府県は必須です。';
+}
+if ($stars === '0'){
+    $errors['stars'] = 'オススメ度は必須です。';
+}
+if (empty($_POST['point'])) {
+    $errors['point'] = 'うれしいポイントを選んでください。';
+}
+if ($_FILES['img']['error'] === UPLOAD_ERR_NO_FILE) {
+    $errors['img'] = '画像を登録してください。';
+}
+if (empty($_POST['comment'])) {
+    $errors['comment'] = 'コメントは必須です。';
+}
+if (!empty($errors)) {
+    $_SESSION['errors'] = $errors;
+    $_SESSION['input_data'] = $_POST;
+    header('Location: input.php');
+    exit(); // エラーがあれば以降の処理を止める
+}
+
 $name  = $_POST["name"];
 $pref  = $_POST["pref"];
 $url   = $_POST["url"];
@@ -65,4 +99,6 @@ foreach ($point as $p) {
 }
 
 // 登録完了後、リダイレクト
+$_SESSION['success'] = "登録が完了しました。";
 header('Location: input.php');
+exit();
